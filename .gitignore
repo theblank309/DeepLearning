@@ -1,0 +1,6 @@
+.vscode
+**/__pycache__/
+dataset/
+saved_models/
+others/
+activate.bat
