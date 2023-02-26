@@ -7,7 +7,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
-from configs.configs_reader.config_reader import config_map
+from configs.configs_reader.configReader import config_map
 from models.NN import NN
 from models.CNN import CNN
 from utils.progressbar import ProgressBar
