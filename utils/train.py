@@ -7,7 +7,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
-from configs.code.config_reader import config_map
+from configs.configs_reader.config_reader import config_map
 from models.NN import NN
 from models.CNN import CNN
 from utils.progressbar import ProgressBar
@@ -53,9 +53,9 @@ def load_hyperparameter(path):
 # Load default data 
 # --------------------------------------------------------------------------------------------------
 def load_data(batch_size):
-    train_data = datasets.MNIST(root='dataset/', train=True, transform=transforms.ToTensor(), download=True)
+    train_data = datasets.MNIST(root='dataset/dataset/', train=True, transform=transforms.ToTensor(), download=True)
     train_loader = DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
-    test_data = datasets.MNIST(root='dataset/', train=True, transform=transforms.ToTensor(), download=True)
+    test_data = datasets.MNIST(root='dataset/dataset/', train=True, transform=transforms.ToTensor(), download=True)
     test_loader = DataLoader(dataset=test_data, batch_size=batch_size, shuffle=True)
     return train_loader,test_loader
 
