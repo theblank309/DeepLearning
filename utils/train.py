@@ -11,8 +11,12 @@ from configs.configs_reader.configReader import config_map
 from models.NN import NN
 from models.CNN import CNN
 from utils.progressbar import ProgressBar
+from dataset.dataset_reader.customDatasetImages import CustomDatasetImages
 
 import traceback
+import warnings
+warnings.filterwarnings("ignore")
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model_map = {
@@ -50,9 +54,17 @@ def load_hyperparameter(path):
     print(f"{sepr[1]*sepr[0]}\n")
     return config
 
+# Split train & test dataset
+# --------------------------------------------------------------------------------------------------
+def get_split_data(dataset, split_per):
+    train_length = int(len(dataset) * split_per)
+    test_length = len(dataset) - train_length
+    train_set, test_set = torch.utils.data.random_split(dataset, [train_length, test_length])
+    return train_set, test_set
+
 # Load default data 
 # --------------------------------------------------------------------------------------------------
-def load_data(batch_size):
+def load_data(batch_size, dataset_path=None):
     train_data = datasets.MNIST(root='dataset/dataset/', train=True, transform=transforms.ToTensor(), download=True)
     train_loader = DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
     test_data = datasets.MNIST(root='dataset/dataset/', train=True, transform=transforms.ToTensor(), download=True)
@@ -61,11 +73,10 @@ def load_data(batch_size):
 
 # Load custom data 
 # --------------------------------------------------------------------------------------------------
-def load_custom_data(batch_size):
-    train_data = datasets.MNIST(root='dataset/', train=True, transform=transforms.ToTensor(), download=True)
-    train_loader = DataLoader(dataset=train_data, batch_size=batch_size, shuffle=True)
-    test_data = datasets.MNIST(root='dataset/', train=True, transform=transforms.ToTensor(), download=True)
-    test_loader = DataLoader(dataset=test_data, batch_size=batch_size, shuffle=True)
+def load_custom_data(batch_size, dataset):
+    train_set, test_set = get_split_data(dataset, 0.85)
+    train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(dataset=test_set, batch_size=batch_size, shuffle=True)
     return train_loader,test_loader
 
 # Save model checkpoint
@@ -181,11 +192,13 @@ def check_accuracy(model, loader):
 if __name__ == "__main__":
     path = r"C:\Siddhesh\Programming\Machine Learning\DeepLearning\configs\hyperparameter.json"
     param = load_hyperparameter(path)
-    train_loader,test_loader = load_data(param.batch_size)
+
+    image_size = tuple(param.input_shape[:-1])
+    transform = transforms.Compose([transforms.Resize(image_size), transforms.ToTensor()])
+    dataset = CustomDatasetImages(root_dir=param.dataset_path, transform=transform)
+
+    train_loader,test_loader = load_custom_data(param.batch_size, dataset)
     model = train_model(param, train_loader)
 
-    # model_path = r"C:\Siddhesh\Programming\Machine Learning\DeepLearning\saved_models\CNN_best_model.pth"
-    # model = load_checkpoint(model_path, param)
-    # Check accuracy on training & test to see how good our model
     print(f"Accuracy on training set: {check_accuracy(model, train_loader):.2f}")
     print(f"Accuracy on testing set: {check_accuracy(model, test_loader):.2f}")

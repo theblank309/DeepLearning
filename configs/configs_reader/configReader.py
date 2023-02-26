@@ -7,6 +7,7 @@ class ConfigReader():
         self.input_shape = data.get("input_shape")
         self.num_classes = data.get("num_classes")
         self.save_path = data.get("save_path")
+        self.dataset_path = data.get("dataset_path")
 
         # Default value
         self.learning_rate = data.get("learning_rate", 0.01)
