@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 # Create Fully Connected Layer
 class CNN(nn.Module):
-    def __init__(self, input_shape, num_classes):
+    def __init__(self, input_shape, num_classes, feature_extractor):
 
         super(CNN, self).__init__()
 

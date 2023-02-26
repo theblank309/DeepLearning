@@ -1,11 +1,12 @@
 {
     "type":"CNN",
-    "input_shape":[512,512,3],
+    "input_shape":[32,32,3],
     "num_classes":10,
     "learning_rate":0.001,
-    "batch_size":2,
+    "batch_size":4,
     "epochs":5,
     "save_mode":"last_model",
+    "feature_extractor":"ResNet18",
     "save_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\saved_models",
     "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\dataset\\covid_data"
 }

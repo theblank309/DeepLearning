@@ -73,8 +73,8 @@ def load_data(batch_size, dataset_path=None):
 
 # Load custom data 
 # --------------------------------------------------------------------------------------------------
-def load_custom_data(batch_size, dataset):
-    train_set, test_set = get_split_data(dataset, 0.85)
+def load_custom_data(batch_size, dataset, split_per):
+    train_set, test_set = get_split_data(dataset, split_per)
     train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_set, batch_size=batch_size, shuffle=True)
     return train_loader,test_loader
@@ -112,17 +112,11 @@ def load_checkpoint(path, param):
 # Train model (Intialized model, loss and optimizer)
 # --------------------------------------------------------------------------------------------------
 @Error_Handler
-def train_model(param, train_loader, progressbar):
-
-    model_class = model_map[param.model_type]
-    model = model_class(input_shape=param.input_shape, num_classes=param.num_classes).to(device)
-
-    # Loss and optimizer
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=param.learning_rate)
+def train_model(model, criterion, optimizer, train_loader, param, progressbar):
 
     selected_model = None
     selected_loss = 0
+    
     for epoch in range(param.epochs):
         batches_acc = []
         batches_loss = []
@@ -154,8 +148,6 @@ def train_model(param, train_loader, progressbar):
         final_loss = sum(batches_loss)/len(batches_loss)
         progressbar.update(final_loss, final_acc, update_value=0)
         progressbar.close()
-
-        final_loss = 0.1
         selected_model, selected_loss = select_checkpoint(selected_model, model, selected_loss, final_loss, param.save_mode, epoch)
     save_checkpoint(selected_model, param)
 
@@ -193,12 +185,20 @@ if __name__ == "__main__":
     path = r"C:\Siddhesh\Programming\Machine Learning\DeepLearning\configs\hyperparameter.json"
     param = load_hyperparameter(path)
 
+    # Load train & test data
     image_size = tuple(param.input_shape[:-1])
     transform = transforms.Compose([transforms.Resize(image_size), transforms.ToTensor()])
     dataset = CustomDatasetImages(root_dir=param.dataset_path, transform=transform)
+    train_loader,test_loader = load_custom_data(param.batch_size, dataset, 0.85)
 
-    train_loader,test_loader = load_custom_data(param.batch_size, dataset)
-    model = train_model(param, train_loader)
+    # Define Model
+    model_class = model_map[param.model_type]
+    model = model_class(param.input_shape, param.num_classes, param.feature_extractor).to(device)
+
+    # Loss and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=param.learning_rate)
+    model = train_model(model, criterion, optimizer, train_loader, param)
 
     print(f"Accuracy on training set: {check_accuracy(model, train_loader):.2f}")
     print(f"Accuracy on testing set: {check_accuracy(model, test_loader):.2f}")

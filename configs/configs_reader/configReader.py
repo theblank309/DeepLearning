@@ -24,6 +24,7 @@ class CNNConfigReader(ConfigReader):
 
     def __init__(self,data) -> None:
         super(CNNConfigReader,self).__init__(data)
+        self.feature_extractor = data.get("feature_extractor", None)
 
 # Config Map
 #----------------------------------------------------------------------------------------------------------
