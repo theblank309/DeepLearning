@@ -4,9 +4,9 @@
     "num_classes":10,
     "learning_rate":0.001,
     "batch_size":4,
-    "epochs":5,
+    "epochs":2,
     "save_mode":"last_model",
     "feature_extractor":"ResNet18",
     "save_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\saved_models",
-    "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\dataset\\covid_data"
+    "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\covid_data"
 }

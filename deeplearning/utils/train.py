@@ -11,7 +11,7 @@ from configs.configs_reader.configReader import config_map
 from models.NN import NN
 from models.CNN import CNN
 from utils.progressbar import ProgressBar
-from dataset.dataset_reader.customDatasetImages import CustomDatasetImages
+from dataset_reader.customDatasetImages import CustomDatasetImages
 
 import traceback
 import warnings
@@ -182,7 +182,7 @@ def check_accuracy(model, loader):
 
 # --------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    path = r"C:\Siddhesh\Programming\Machine Learning\DeepLearning\configs\hyperparameter.json"
+    path = r"C:\Siddhesh\Programming\Machine Learning\DeepLearning\deeplearning\configs\hyperparameter.json"
     param = load_hyperparameter(path)
 
     # Load train & test data

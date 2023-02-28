@@ -1,6 +1,6 @@
 .vscode
 **/__pycache__/
-dataset/dataset/*
+dataset/
 saved_models/
 others/
 activate.bat
