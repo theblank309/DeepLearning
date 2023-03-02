@@ -5,7 +5,7 @@
     "learning_rate":0.001,
     "batch_size":4,
     "epochs":25,
-    "feature_extractor":"ResNet18",
+    "feature_extractor":"",
     "save_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\saved_models",
     "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\birds_species_classification"
 }
