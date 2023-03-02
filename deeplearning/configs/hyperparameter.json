@@ -1,12 +1,12 @@
 {
     "type":"CNN",
-    "input_shape":[32,32,3],
-    "num_classes":10,
+    "input_shape":[256,256,3],
+    "num_classes":20,
     "learning_rate":0.001,
-    "batch_size":4,
-    "epochs":2,
+    "batch_size":2,
+    "epochs":5,
     "save_mode":"last_model",
-    "feature_extractor":"ResNet18",
+    "feature_extractor":"",
     "save_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\saved_models",
-    "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\covid_data"
+    "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\birds_species_classification"
 }

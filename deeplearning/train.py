@@ -19,11 +19,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # seperator for print statement
 sepr = [80,"-"]
 
-model_map = {
-    "NN":NN,
-    "CNN":CNN
-}
-
 # Hyper parameter 
 # --------------------------------------------------------------------------------------------------
 def load_hyperparameter(path):
@@ -44,13 +39,17 @@ if __name__ == "__main__":
 
     # Load train & test data
     image_size = tuple(param.input_shape[:-1])
-    transform = transforms.Compose([transforms.Resize(image_size), transforms.ToTensor()])
+    transform = transforms.Compose([
+        transforms.Resize(image_size), 
+        transforms.ToTensor(),
+        transforms.ColorJitter(brightness=0.5),
+        transforms.RandomHorizontalFlip(p=0.5)
+    ])
     dataset = CustomDatasetImages(root_dir=param.dataset_path, transform=transform)
     train_loader,test_loader = datasetUtils.load_custom_data(param.batch_size, dataset, 0.85)
 
     # Define Model
-    model_class = model_map[param.model_type]
-    model = model_class(param.input_shape, param.num_classes, param.feature_extractor).to(device)
+    model = CNN(param.input_shape, param.num_classes, param.feature_extractor).to(device)
 
     # Loss and optimizer
     criterion = torch.nn.CrossEntropyLoss()
