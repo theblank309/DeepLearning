@@ -1,12 +1,11 @@
 {
     "type":"CNN",
     "input_shape":[256,256,3],
-    "num_classes":20,
+    "num_classes":50,
     "learning_rate":0.001,
-    "batch_size":2,
-    "epochs":5,
-    "save_mode":"last_model",
-    "feature_extractor":"",
+    "batch_size":4,
+    "epochs":25,
+    "feature_extractor":"ResNet18",
     "save_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\saved_models",
     "dataset_path":"C:\\Siddhesh\\Programming\\Machine Learning\\DeepLearning\\dataset\\birds_species_classification"
 }

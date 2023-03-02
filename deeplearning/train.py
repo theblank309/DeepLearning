@@ -43,7 +43,8 @@ if __name__ == "__main__":
         transforms.Resize(image_size), 
         transforms.ToTensor(),
         transforms.ColorJitter(brightness=0.5),
-        transforms.RandomHorizontalFlip(p=0.5)
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomRotation(degrees=[30,45]),
     ])
     dataset = CustomDatasetImages(root_dir=param.dataset_path, transform=transform)
     train_loader,test_loader = datasetUtils.load_custom_data(param.batch_size, dataset, 0.85)

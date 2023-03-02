@@ -13,7 +13,6 @@ class ConfigReader():
         self.learning_rate = data.get("learning_rate", 0.01)
         self.batch_size = data.get("batch_size", 1)
         self.epochs = data.get("epochs", 10)
-        self.save_mode = data.get("save_mode", "last_model")
 
 class NNConfigReader(ConfigReader):
 

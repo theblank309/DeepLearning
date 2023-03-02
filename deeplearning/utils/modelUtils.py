@@ -1,17 +1,29 @@
+import os
 import torch
 from models.NN import NN
 from models.CNN import CNN
+
+from datetime import datetime
 
 model_map = {
     "NN":NN,
     "CNN":CNN
 }
 
+def get_model_savepath(param):
+    dataset_name = os.path.basename(param.dataset_path)
+    now = datetime.now()
+    dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
+    model_dir = f"{dataset_name}_({dt_string})"
+    os.makedirs(f"{param.save_path}\\{model_dir}", exist_ok=True)
+    full_model_dir = f"{param.save_path}\\{model_dir}"
+    return full_model_dir
+
 # Save model checkpoint
 # --------------------------------------------------------------------------------------------------
-def save_checkpoint(model, param):
+def save_checkpoint(model, epoch, full_model_dir):
     checkpoint = {"state_dict":model.state_dict()}
-    save_path = f"{param.save_path}\\{param.model_type}_{param.save_mode}.pth"
+    save_path = f"{full_model_dir}\\model_{epoch}.pth"
     torch.save(checkpoint, save_path)
 
 # Load model checkpoint

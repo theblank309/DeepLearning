@@ -25,16 +25,10 @@ def Error_Handler(func):
 
 # Select model using save mode
 # --------------------------------------------------------------------------------------------------
-def select_checkpoint(selected_model, current_model, selected_loss, current_loss, save_mode, epoch):
-    save_mode = save_mode.lower()
-
-    if save_mode == "best_model":
-        if current_loss < selected_loss or epoch == 0:
-            return current_model, current_loss
-        return selected_model, selected_loss
-
-    if save_mode == "last_model":
+def select_checkpoint(selected_model, current_model, selected_loss, current_loss, epoch):
+    if current_loss < selected_loss or epoch == 0:
         return current_model, current_loss
+    return selected_model, selected_loss
 
 # Train model (Intialized model, loss and optimizer)
 # --------------------------------------------------------------------------------------------------
@@ -43,6 +37,7 @@ def train_model(model, criterion, optimizer, train_loader, param, progressbar):
 
     selected_model = None
     selected_loss = 0
+    model_dir = modelUtils.get_model_savepath(param)
     
     for epoch in range(param.epochs):
         batches_acc = []
@@ -73,10 +68,13 @@ def train_model(model, criterion, optimizer, train_loader, param, progressbar):
         
         final_acc = sum(batches_acc)/len(batches_acc)
         final_loss = sum(batches_loss)/len(batches_loss)
+
         progressbar.update(final_loss, final_acc, update_value=0)
         progressbar.close()
-        selected_model, selected_loss = select_checkpoint(selected_model, model, selected_loss, final_loss, param.save_mode, epoch)
-    modelUtils.save_checkpoint(selected_model, param)
+
+        selected_model, selected_loss = select_checkpoint(selected_model, model, selected_loss, final_loss, epoch)
+        modelUtils.save_checkpoint(selected_model, epoch, model_dir)
+    modelUtils.save_checkpoint(model, "last_model", model_dir)
 
     return model
 
